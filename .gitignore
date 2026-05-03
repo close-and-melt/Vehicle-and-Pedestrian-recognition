@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+*.pyc
+.DS_Store
+venv/
+env/
+# Training outputs and models
+runs/
+*.pt
+*.avi
+*.mp4
+dataset/
