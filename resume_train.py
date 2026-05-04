@@ -1,10 +1,28 @@
+"""
+Resume training script for YOLO vehicle and pedestrian detection model.
+
+Loads a previously interrupted training checkpoint (last.pt) and continues
+training from where it left off, automatically restoring all parameters
+including epochs, image size, batch size, and optimizer state.
+"""
+
 from ultralytics import YOLO
 
 if __name__ == '__main__':
-    # 1. 直接加载那个“存档”文件
-    # 注意：路径一定要指向具体的 last.pt
-    model = YOLO(r"E:\Administrator\three\Artificial_Intelligence\PyCharmMiscProject\runs\detect\improve_person_v1\yolo11s_640_res\weights\last.pt")
+    # Load the last checkpoint from a previous training session
+    # Note: The path must point to a specific .pt file (last.pt or best.pt)
+    # last.pt contains the complete training state including:
+    #   - Model weights
+    #   - Optimizer state
+    #   - Current epoch number
+    #   - Best metrics so far
+    model = YOLO(
+        r"E:\Administrator\three\Artificial_Intelligence\Vehicle-Pedestrian\runs\detect\improve_person_v1\yolo11s_640_res\weights\last.pt")
 
-    # 2. 开启续传
-    # 只要设置 resume=True，YOLO会自动找回之前的 imgsz, batch 和 50轮的目标
+    # Resume training from the checkpoint
+    # Setting resume=True automatically restores:
+    #   - Original training configuration (imgsz, batch, epochs, etc.)
+    #   - Current epoch (continues from where it stopped)
+    #   - Optimizer state (momentum, learning rate schedule, etc.)
+    #   - Best model tracking
     model.train(resume=True)

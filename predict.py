@@ -1,25 +1,48 @@
+"""
+Prediction script for YOLO vehicle and pedestrian detection model.
+
+Performs object detection on video files using a trained YOLO model.
+Supports Pedestrian and car detection with adjustable confidence threshold.
+"""
+
 from ultralytics import YOLO
 
-def predict_video():
+
+def predict_video() -> None:
+    """
+    Run inference on a video file using the trained YOLO model.
+
+    Configuration:
+        - Model: Best checkpoint from training (vehicle_pedestrian_v13)
+        - Input source: Video file (test3.mp4)
+        - Confidence threshold: 0.4 (minimum confidence to show detection)
+        - IOU threshold: 0.45 (Non-Maximum Suppression overlap threshold)
+        - Image size: 480 (must match training image size)
+        - Device: GPU 0 (CUDA for faster inference)
+        - Output: Display results in real-time window + save video file
+    """
+    # Load the trained YOLO model (best checkpoint from training)
     model = YOLO(r"E:\YOLO_training\runs\train\vehicle_pedestrian_v13\weights\best.pt")
 
+    # Run prediction on the video file
     results = model.predict(
-        source=r"D:\Download\test3.mp4",
-        conf=0.4,          # 置信度阈值，低于此值不显示
-        iou=0.45,           # NMS重叠阈值
-        imgsz=480,          # 与训练时保持一致
-        device=0,           # GPU推理
-        show=True,          # 实时显示检测窗口
-        save=True,          # 保存结果视频
-        project=r"E:\YOLO_training\runs\predict",  # 保存目录
-        name="test_result",
-        line_width=2,       # 检测框线条粗细
-        show_conf=True,     # 显示置信度
-        show_labels=True,   # 显示类别标签
+        source=r"D:\Download\test3.mp4",  # Input video path
+        conf=0.4,  # Confidence threshold (boxes below this are filtered)
+        iou=0.45,  # NMS IoU threshold (reduces duplicate detections)
+        imgsz=480,  # Input image size (must match training size)
+        device=0,  # GPU device ID (0 = first GPU, use 'cpu' for CPU)
+        show=True,  # Display real-time detection window
+        save=True,  # Save output video with detections
+        project=r"E:\YOLO_training\runs\predict",  # Root directory for saving results
+        name="test_result",  # Subdirectory name for this run
+        line_width=2,  # Bounding box line thickness in pixels
+        show_conf=True,  # Display confidence score on boxes
+        show_labels=True,  # Display class labels (Pedestrian/car) on boxes
     )
 
-    print("推理完成！")
-    print(r"结果视频保存于: E:\YOLO_training\runs\predict\test_result")
+    print("Inference completed!")
+    print(r"Output video saved at: E:\YOLO_training\runs\predict\test_result")
+
 
 if __name__ == "__main__":
     predict_video()
