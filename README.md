@@ -77,7 +77,7 @@ Start training with default configurations:
 python train.py
 ```
 
-To customize training parameters (such as image size, number of training epochs, device, etc.), you can directly modify the parameters in `train.py` or pass them via the command line.
+To customize training parameters (such as image size, number of training epochs, device, etc.), directly modify the parameters in `train.py`.
 
 ### Resume Training
 
@@ -88,16 +88,9 @@ python resume_train.py
 
 ### Model Prediction
 
-Perform prediction on a single image, video file, or real-time camera stream:
+Modify the `source` parameter in `predict.py` to your image/video path or camera ID, then run:
 ```bash
-# Predict on an image
-python predict.py --source path/to/image.jpg
-
-# Predict on a video
-python predict.py --source path/to/video.mp4
-
-# Real-time detection using camera (usually camera device ID is 0)
-python predict.py --source 0
+python predict.py
 ```
 
 ## Project File Description

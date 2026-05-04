@@ -77,7 +77,7 @@ Vehicle-and-Pedestrian-recognition/
 python train.py
 ```
 
-如需自定义训练参数（如图像尺寸、训练轮数、设备等），可直接修改 `train.py` 中的参数，或通过命令行传递。
+如需自定义训练参数（如图像尺寸、训练轮数、设备等），直接修改 `train.py` 中的参数即可。
 
 ### 恢复训练
 
@@ -88,16 +88,9 @@ python resume_train.py
 
 ### 模型预测
 
-对单张图片、视频文件或摄像头实时流进行预测：
+将 `predict.py` 中的 `source` 参数改为你的图片/视频路径或摄像头 ID，然后运行：
 ```bash
-# 对图片进行预测
-python predict.py --source path/to/image.jpg
-
-# 对视频进行预测
-python predict.py --source path/to/video.mp4
-
-# 使用摄像头实时检测（通常摄像头设备号为 0）
-python predict.py --source 0
+python predict.py
 ```
 
 ## 项目文件说明
