@@ -2,34 +2,27 @@
 Resume training script for YOLO vehicle and pedestrian detection model.
 
 Loads a previously interrupted training checkpoint (last.pt) and continues
-training from where it left off, automatically restoring all parameters.
+training from where it left off, automatically restoring all parameters
+including epochs, image size, batch size, and optimizer state.
 """
 
-import argparse
 from ultralytics import YOLO
 
+if __name__ == '__main__':
+    # Load the last checkpoint from a previous training session
+    # Note: The path must point to a specific .pt file (last.pt or best.pt)
+    # last.pt contains the complete training state including:
+    #   - Model weights
+    #   - Optimizer state
+    #   - Current epoch number
+    #   - Best metrics so far
+    model = YOLO(
+        r"E:\Administrator\three\Artificial_Intelligence\Vehicle-Pedestrian\runs\detect\improve_person_v1\yolo11s_640_res\weights\last.pt")
 
-def resume() -> None:
-    """
-    Resume training from a previously interrupted checkpoint.
-
-    The checkpoint (last.pt) contains the complete training state including:
-        - Model weights
-        - Optimizer state
-        - Current epoch number
-        - Best metrics so far
-
-    Calling train(resume=True) automatically restores the original training
-    configuration and continues from where it stopped.
-    """
-    parser = argparse.ArgumentParser(description="Resume YOLO Training")
-    parser.add_argument("--model", type=str, required=True,
-                        help="Path to checkpoint file (last.pt or best.pt)")
-    args = parser.parse_args()
-
-    model = YOLO(args.model)
+    # Resume training from the checkpoint
+    # Setting resume=True automatically restores:
+    #   - Original training configuration (imgsz, batch, epochs, etc.)
+    #   - Current epoch (continues from where it stopped)
+    #   - Optimizer state (momentum, learning rate schedule, etc.)
+    #   - Best model tracking
     model.train(resume=True)
-
-
-if __name__ == "__main__":
-    resume()
