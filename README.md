@@ -128,5 +128,3 @@ python predict.py --source 0
 
 - [Ultralytics YOLOv11](https://github.com/ultralytics/ultralytics) 提供的目标检测框架
 - [Roboflow Universe](https://universe.roboflow.com/) 提供的数据集平台
-```
-
