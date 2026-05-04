@@ -1,6 +1,13 @@
 # Vehicle and Pedestrian Recognition
 
-车辆与行人识别（目标检测）| Vehicle and Pedestrian recognition (Object Detection)
+<p>
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+  <img src="https://img.shields.io/badge/Python-3.8+-blue" alt="Python">
+  <img src="https://img.shields.io/badge/Framework-Ultralytics%20YOLOv11-orange" alt="YOLO">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey" alt="Platform">
+</p>
+
+车辆与行人识别（目标检测）
 
 > 📌 英文版本：[README.md](./README.md)
 

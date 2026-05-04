@@ -1,48 +1,85 @@
 """
 Prediction script for YOLO vehicle and pedestrian detection model.
 
-Performs object detection on video files using a trained YOLO model.
-Supports Pedestrian and car detection with adjustable confidence threshold.
+Performs object detection on images, videos, or camera streams
+using a trained YOLO model.
 """
 
+import argparse
 from ultralytics import YOLO
 
 
-def predict_video() -> None:
+def predict() -> None:
     """
-    Run inference on a video file using the trained YOLO model.
+    Run inference on images, video files, or camera streams using a trained YOLO model.
 
     Configuration:
-        - Model: Best checkpoint from training (vehicle_pedestrian_v13)
-        - Input source: Video file (test3.mp4)
+        - Model: Trained checkpoint (.pt file, required)
+        - Input source: Image path, video path, or camera ID (required)
         - Confidence threshold: 0.4 (minimum confidence to show detection)
         - IOU threshold: 0.45 (Non-Maximum Suppression overlap threshold)
         - Image size: 480 (must match training image size)
         - Device: GPU 0 (CUDA for faster inference)
-        - Output: Display results in real-time window + save video file
+        - Output: Display real-time window + save video file
     """
-    # Load the trained YOLO model (best checkpoint from training)
-    model = YOLO(r"E:\YOLO_training\runs\train\vehicle_pedestrian_v13\weights\best.pt")
+    parser = argparse.ArgumentParser(description="YOLO Vehicle/Pedestrian Prediction")
+    parser.add_argument("--model", type=str, required=True,
+                        help="Path to trained model weights (.pt file)")
+    parser.add_argument("--source", type=str, required=True,
+                        help="Input source: image path, video path, or camera ID (e.g., 0)")
+    parser.add_argument("--conf", type=float, default=0.4,
+                        help="Confidence threshold (default: 0.4)")
+    parser.add_argument("--iou", type=float, default=0.45,
+                        help="NMS IoU threshold (default: 0.45)")
+    parser.add_argument("--imgsz", type=int, default=480,
+                        help="Input image size (default: 480)")
+    parser.add_argument("--device", type=str, default="0",
+                        help="Device ID or 'cpu' (default: 0)")
+    parser.add_argument("--project", type=str, default="runs/predict",
+                        help="Root directory for saving results (default: runs/predict)")
+    parser.add_argument("--name", type=str, default="result",
+                        help="Subdirectory name for this run (default: result)")
+    parser.add_argument("--show", action="store_true",
+                        help="Display real-time detection window")
+    parser.add_argument("--save", action="store_true", default=True,
+                        help="Save output video/image with detections")
+    parser.add_argument("--no-save", action="store_false", dest="save",
+                        help="Do not save output")
+    parser.add_argument("--line-width", type=int, default=2,
+                        help="Bounding box line thickness (default: 2)")
+    parser.add_argument("--show-conf", action="store_true", default=True,
+                        help="Display confidence score on boxes")
+    parser.add_argument("--no-show-conf", action="store_false", dest="show_conf",
+                        help="Hide confidence scores")
+    parser.add_argument("--show-labels", action="store_true", default=True,
+                        help="Display class labels on boxes")
+    parser.add_argument("--no-show-labels", action="store_false", dest="show_labels",
+                        help="Hide class labels")
+    args = parser.parse_args()
 
-    # Run prediction on the video file
+    # Load the trained model. --model must point to a YOLO checkpoint (.pt).
+    model = YOLO(args.model)
+
+    # Run inference. --source accepts an image path, video path, or camera ID.
+    # The confidence threshold (--conf) filters out weak detections;
+    # the IoU threshold (--iou) controls overlap removal via NMS.
     results = model.predict(
-        source=r"D:\Download\test3.mp4",  # Input video path
-        conf=0.4,  # Confidence threshold (boxes below this are filtered)
-        iou=0.45,  # NMS IoU threshold (reduces duplicate detections)
-        imgsz=480,  # Input image size (must match training size)
-        device=0,  # GPU device ID (0 = first GPU, use 'cpu' for CPU)
-        show=True,  # Display real-time detection window
-        save=True,  # Save output video with detections
-        project=r"E:\YOLO_training\runs\predict",  # Root directory for saving results
-        name="test_result",  # Subdirectory name for this run
-        line_width=2,  # Bounding box line thickness in pixels
-        show_conf=True,  # Display confidence score on boxes
-        show_labels=True,  # Display class labels (Pedestrian/car) on boxes
+        source=args.source,
+        conf=args.conf,
+        iou=args.iou,
+        imgsz=args.imgsz,
+        device=args.device,
+        show=args.show,
+        save=args.save,
+        project=args.project,
+        name=args.name,
+        line_width=args.line_width,
+        show_conf=args.show_conf,
+        show_labels=args.show_labels,
     )
 
-    print("Inference completed!")
-    print(r"Output video saved at: E:\YOLO_training\runs\predict\test_result")
+    print(f"Inference completed! Results saved to: {args.project}/{args.name}")
 
 
 if __name__ == "__main__":
-    predict_video()
+    predict()

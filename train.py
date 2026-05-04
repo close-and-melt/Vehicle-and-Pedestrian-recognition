@@ -1,10 +1,11 @@
 """
 Training script for YOLO vehicle and pedestrian detection model.
 
-Uses YOLOv11n as base model and trains on filtered dataset containing
-only Pedestrian and car classes.
+Uses YOLOv11 as base model and trains on a dataset containing
+Pedestrian and car classes.
 """
 
+import argparse
 from ultralytics import YOLO
 
 
@@ -24,22 +25,54 @@ def train() -> None:
         - Early stopping patience: 20 epochs
         - Plots: enabled (generates training visualization charts)
     """
-    # Load pre-trained YOLOv11n model
-    model = YOLO("yolo11n.pt")
+    parser = argparse.ArgumentParser(description="YOLO Vehicle/Pedestrian Training")
+    parser.add_argument("--data", type=str, default="data.yaml",
+                        help="Path to dataset config file (default: data.yaml)")
+    parser.add_argument("--model", type=str, default="yolo11n.pt",
+                        help="Base model weights (default: yolo11n.pt)")
+    parser.add_argument("--epochs", type=int, default=50,
+                        help="Number of training epochs (default: 50)")
+    parser.add_argument("--imgsz", type=int, default=480,
+                        help="Input image size (default: 480)")
+    parser.add_argument("--batch", type=int, default=4,
+                        help="Batch size (default: 4)")
+    parser.add_argument("--device", type=str, default="0",
+                        help="Device ID or 'cpu' (default: 0)")
+    parser.add_argument("--workers", type=int, default=2,
+                        help="Data loading workers (default: 2)")
+    parser.add_argument("--project", type=str, default="runs/train",
+                        help="Root directory for saving outputs (default: runs/train)")
+    parser.add_argument("--name", type=str, default="vehicle_pedestrian",
+                        help="Subdirectory name for this run (default: vehicle_pedestrian)")
+    parser.add_argument("--patience", type=int, default=20,
+                        help="Early stopping patience (default: 20)")
+    parser.add_argument("--cache", type=str, default="disk",
+                        help="Cache mode: disk, ram, or None (default: disk)")
+    parser.add_argument("--plots", action="store_true", default=True,
+                        help="Generate training plots")
+    parser.add_argument("--no-plots", action="store_false", dest="plots",
+                        help="Disable training plots")
+    args = parser.parse_args()
 
-    # Start training
-    results = model.train(
-        data=r"E:\YOLO_training_filtered\data.yaml",  # Path to dataset configuration
-        epochs=50,  # Number of training epochs
-        imgsz=480,  # Input image size
-        batch=4,  # Batch size (reduced to prevent OOM)
-        device=0,  # GPU device ID (0 = first GPU, use 'cpu' for CPU)
-        workers=2,  # Number of data loading workers
-        cache="disk",  # Cache images to disk (avoid memory conflicts)
-        project=r"E:\YOLO_training\runs\train",  # Root directory for saving outputs
-        name="vehicle_pedestrian_v1",  # Subdirectory name for this run
-        patience=20,  # Early stopping patience (stop if no improvement for 20 epochs)
-        plots=True,  # Generate training plots (loss curves, PR curves, etc.)
+    # Load the YOLO model (pre-trained weights or a previous checkpoint)
+    model = YOLO(args.model)
+
+    # Train the model. The dataset config (data.yaml) must specify:
+    #   - train/val/test image paths
+    #   - number of classes (nc) and class names
+    # Batch size is kept low by default to avoid GPU out-of-memory on consumer GPUs.
+    model.train(
+        data=args.data,
+        epochs=args.epochs,
+        imgsz=args.imgsz,
+        batch=args.batch,
+        device=args.device,
+        workers=args.workers,
+        cache=args.cache,
+        project=args.project,
+        name=args.name,
+        patience=args.patience,
+        plots=args.plots,
     )
 
 

@@ -1,5 +1,12 @@
 # Vehicle and Pedestrian Recognition
 
+<p>
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+  <img src="https://img.shields.io/badge/Python-3.8+-blue" alt="Python">
+  <img src="https://img.shields.io/badge/Framework-Ultralytics%20YOLOv11-orange" alt="YOLO">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey" alt="Platform">
+</p>
+
 Vehicle and Pedestrian Recognition (Object Detection)
 
 > 🔍 Chinese Version：[README.zh.md](./README.zh.md)

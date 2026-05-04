@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 venv/
 env/
+.venv/
 # Training outputs and models
 runs/
 *.pt
