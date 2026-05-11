@@ -93,6 +93,20 @@ Modify the `source` parameter in `predict.py` to your image/video path or camera
 python predict.py
 ```
 
+## Detection Results
+
+The following image shows the detection results on a test scene:
+
+![Detection Result](detect_result.png)
+
+**Performance Summary:**
+- The model successfully detected most **unobstructed vehicles and pedestrians** under normal conditions.
+- **Partially occluded** targets were often missed, indicating room for improvement in occlusion handling.
+- Confidence scores across detections were **generally low**, suggesting the model lacks certainty on this dataset.
+- **Two false positives** occurred: a window and a pillar were incorrectly classified as targets.
+
+These results highlight both the model's potential and the challenges of deploying it in complex real-world scenarios with occlusion and visually ambiguous backgrounds.
+
 ## Project File Description
 
 | File | Description |
